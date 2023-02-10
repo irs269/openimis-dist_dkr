@@ -22,9 +22,9 @@ services:
       interval: 40s
       timeout: 10s
       retries: 5
-  #  networks:
-  #    openimis-net:
-  #      ipv4_address: 172.20.${IP_SUB:-20}.99
+    networks:
+      openimis-net:
+        ipv4_address: 172.20.${IP_SUB:-20}.99
   ## WARNING:
     ## exposing the database port outside the openimis-net network
     ## may lead to security issue (depending on your network topology)
@@ -39,6 +39,10 @@ services:
     image: openimis/backend:${PROJECT_NAME:-local}
     volumes:
       - ../openimis-be_py:/openimis-be
+      - ../openimis-be-cs_py:/openimis-be-cs_py
+      - ../openimis-be-csu_py:/openimis-be-csu_py
+      - ../openimis-be-report-csu_py:/openimis-be-report-csu_py
+      - ../openimis-be-program_py:/openimis-be-program_py
       - photos:/openimis-be/openIMIS/images/insurees
     command: start
     environment: &backend-env
@@ -50,9 +54,9 @@ services:
       - SITE_ROOT=api
       - SITE_URL=${NEW_OPENIMIS_HOST}
       - CELERY_BROKER_URL=amqp://rabbitmq
-    #networks:
-    #  openimis-net:
-    #     ipv4_address: 172.20.${IP_SUB:-20}.12
+    networks:
+      openimis-net:
+         ipv4_address: 172.20.${IP_SUB:-20}.12
     ports:
       - ${HTTP_PORT:-8000}:8000
 
@@ -73,22 +77,22 @@ services:
   #  ports:
   #    - 8080:80
 
-  #frontend:
-  #  container_name: ${PROJECT_NAME:-openimis}-frontend
-  #  build:
-  #    context: ../openimis-fe_js/
-  #    args:
-  #       OPENIMIS_CONF_JSON: ${OPENIMIS_FE_CONF_JSON}
-  #  #command: serve -s build
-  #  environment:
-  #    - PORT=5000
-  #    - REACT_APP_API_URL=/api
-  #    - PUBLIC_URL=/front
-  #    - NEW_OPENIMIS_HOST=${NEW_OPENIMIS_HOST}
-  #    - OPENIMIS_CONF_JSON=${OPENIMIS_FE_CONF_JSON}
-  #  networks:
-  #    openimis-net:
-  #      ipv4_address: 172.20.${IP_SUB:-20}.13
+  frontend:
+    container_name: ${PROJECT_NAME:-openimis}-frontend
+    build:
+      context: ../openimis-fe_js/
+      args:
+         OPENIMIS_CONF_JSON: ${OPENIMIS_FE_CONF_JSON}
+    #command: serve -s build
+    environment:
+      - PORT=5000
+      - REACT_APP_API_URL=/api
+      - PUBLIC_URL=/front
+      - NEW_OPENIMIS_HOST=${NEW_OPENIMIS_HOST}
+      - OPENIMIS_CONF_JSON=${OPENIMIS_FE_CONF_JSON}
+    networks:
+      openimis-net:
+        ipv4_address: 172.20.${IP_SUB:-20}.13
   
   #gateway:
   #  container_name: ${PROJECT_NAME:-openimis}-gateway
