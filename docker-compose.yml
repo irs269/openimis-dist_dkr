@@ -43,6 +43,9 @@ services:
       - ../openimis-be-csu_py:/openimis-be-csu_py
       - ../openimis-be-report-csu_py:/openimis-be-report-csu_py
       - ../openimis-be-program_py:/openimis-be-program_py
+      - ../openimis-be-claim_py:/openimis-be-claim_py
+      - ../openimis-be-location_py:/openimis-be-location_py
+      - ../openimis-be-product_py:/openimis-be-product_py
       - photos:/openimis-be/openIMIS/images/insurees
     command: start
     environment: &backend-env
@@ -71,28 +74,30 @@ services:
   #    - ./OpenImis.RestApi/Certificates:/app/wwwRoot/Certificates
   #    - photos:/app/openIMISphone
   #  command: start
-    #networks:
-    #  openimis-net:
-    #     ipv4_address: 172.20.${IP_SUB:-20}.12
+  #  networks:
+  #    openimis-net:
+  #       ipv4_address: 172.20.${IP_SUB:-20}.12
   #  ports:
   #    - 8080:80
 
-  frontend:
-    container_name: ${PROJECT_NAME:-openimis}-frontend
-    build:
-      context: ../openimis-fe_js/
-      args:
-         OPENIMIS_CONF_JSON: ${OPENIMIS_FE_CONF_JSON}
-    #command: serve -s build
-    environment:
-      - PORT=5000
-      - REACT_APP_API_URL=/api
-      - PUBLIC_URL=/front
-      - NEW_OPENIMIS_HOST=${NEW_OPENIMIS_HOST}
-      - OPENIMIS_CONF_JSON=${OPENIMIS_FE_CONF_JSON}
-    networks:
-      openimis-net:
-        ipv4_address: 172.20.${IP_SUB:-20}.13
+  #frontend:
+  #  container_name: ${PROJECT_NAME:-openimis}-frontend
+  #  build:
+  #    context: ../openimis-fe_js/
+  #    args:
+  #       OPENIMIS_CONF_JSON: ${OPENIMIS_FE_CONF_JSON}
+  #  #command: serve -s build
+  #  environment:
+  #    - PORT=5000
+  #    - REACT_APP_API_URL=/api
+  #    - PUBLIC_URL=/front
+  #    - NEW_OPENIMIS_HOST=${NEW_OPENIMIS_HOST}
+  #    - OPENIMIS_CONF_JSON=${OPENIMIS_FE_CONF_JSON}
+  #  ports:
+  #    - 5001:5000
+  #  networks:
+  #    openimis-net:
+  #      ipv4_address: 172.20.${IP_SUB:-20}.13
   
   #gateway:
   #  container_name: ${PROJECT_NAME:-openimis}-gateway
@@ -100,8 +105,8 @@ services:
   #    context: https://github.com/openimis/openimis-gateway_dkr.git#${GW_BRANCH:-develop}
   #  environment:
   #    - NEW_OPENIMIS_HOST=${NEW_OPENIMIS_HOST}
-    #volumes:
-    #  - ./conf/gateway:/conf
+  #  volumes:
+  #    - ./conf/gateway:/conf
   #  networks:
   #    openimis-net:
   #      ipv4_address: 172.20.${IP_SUB:-20}.14
@@ -110,7 +115,7 @@ services:
   #    - ${HTTPS_PORT:-443}:443
   #  depends_on:
   #    - backend
-      #- frontend
+  #    - frontend
 
   #worker:
   #  container_name: ${PROJECT_NAME:-openimis}-worker
