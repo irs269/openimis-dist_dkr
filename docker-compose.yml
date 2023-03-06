@@ -2,7 +2,7 @@ version: "2.4"
 
 services:
   db:
-    container_name: ${PROJECT_NAME:-openimis}-db
+    container_name: db
     build:
       context: ../openimis-db_dkr/
       args:
@@ -38,14 +38,9 @@ services:
         OPENIMIS_CONF_JSON: ${OPENIMIS_BE_CONF_JSON}
     image: openimis/backend:${PROJECT_NAME:-local}
     volumes:
-      - ../openimis-be_py:/openimis-be
-      - ../openimis-be-cs_py:/openimis-be-cs_py
-      - ../openimis-be-csu_py:/openimis-be-csu_py
-      - ../openimis-be-report-csu_py:/openimis-be-report-csu_py
-      - ../openimis-be-program_py:/openimis-be-program_py
-      - ../openimis-be-claim_py:/openimis-be-claim_py
-      - ../openimis-be-location_py:/openimis-be-location_py
-      - ../openimis-be-product_py:/openimis-be-product_py
+      - ../openimis-be_py:/openimis-be/
+      - ../openimis-be-insuree_py:/openimis-be-insuree_py
+      - ../openimis-be-report-mauritania_py:/openimis-be-report-mauritania_py
       - photos:/openimis-be/openIMIS/images/insurees
     command: start
     environment: &backend-env
@@ -63,22 +58,20 @@ services:
     ports:
       - ${HTTP_PORT:-8000}:8000
 
-  #webservice:
-  #  container_name: ${PROJECT_NAME:-openimis}-webservice
+  #restapi:
+  #  container_name: ${PROJECT_NAME}-restapi
   #  build:
   #    context: ../rest_api_c-sharp/
-  #  image: openimis/webservice:${PROJECT_NAME:-local}
+  #    args:
+  #      BUILD-FLAVOUR: ${RESTAPI_BUILD_FLAVOUR:-Release}
   #  volumes:
-  #    - ./OpenImis.RestApi/config:/app/config
-  #    - ./OpenImis.RestApi/logs:/app/log
-  #    - ./OpenImis.RestApi/Certificates:/app/wwwRoot/Certificates
+  #    - ./conf/restapi:/app/config
+  #    - ./logs:/app/log
   #    - photos:/app/openIMISphone
-  #  command: start
   #  networks:
   #    openimis-net:
-  #       ipv4_address: 172.20.${IP_SUB:-20}.12
-  #  ports:
-  #    - 8080:80
+  #       ipv4_address: 172.20.${IP_SUB:-20}.18
+
 
   #frontend:
   #  container_name: ${PROJECT_NAME:-openimis}-frontend
