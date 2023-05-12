@@ -2,7 +2,7 @@ version: "2.4"
 
 services:
   db:
-    container_name: db
+    container_name: ${PROJECT_NAME:-openimis}-db
     build:
       context: ../openimis-db_dkr/
       args:
@@ -16,7 +16,7 @@ services:
       - ACCEPT_EULA=${ACCEPT_EULA}
     volumes:
       - ./mssql/logs:/var/opt/mssql/log 
-      - ./mssql3/database:/var/opt/mssql/data
+      - ./mssql/database:/var/opt/mssql/data
     healthcheck:
       test: "bash /app/healthcheck.sh"
       interval: 40s
@@ -38,7 +38,7 @@ services:
         OPENIMIS_CONF_JSON: ${OPENIMIS_BE_CONF_JSON}
     image: openimis/backend:${PROJECT_NAME:-local}
     volumes:
-      - ../openimis-be_py:/openimis-be
+      - ../openimis-be_py:/openimis-be_py
       - ../openimis-be-insuree_py:/openimis-be-insuree_py
       - ../openimis-be-idps_py:/openimis-be-idps_py
       - ../openimis-be-medical_py:/openimis-be-medical_py
@@ -60,20 +60,22 @@ services:
     ports:
       - ${HTTP_PORT:-8000}:8000
 
-  #restapi:
-  #  container_name: ${PROJECT_NAME}-restapi
+  #webservice:
+  #  container_name: ${PROJECT_NAME:-openimis}-webservice
   #  build:
   #    context: ../rest_api_c-sharp/
-  #    args:
-  #      BUILD-FLAVOUR: ${RESTAPI_BUILD_FLAVOUR:-Release}
+  #  image: openimis/webservice:${PROJECT_NAME:-local}
   #  volumes:
-  #    - ./conf/restapi:/app/config
-  #    - ./logs:/app/log
+  #    - ./OpenImis.RestApi/config:/app/config
+  #    - ./OpenImis.RestApi/logs:/app/log
+  #    - ./OpenImis.RestApi/Certificates:/app/wwwRoot/Certificates
   #    - photos:/app/openIMISphone
+  #  command: start
   #  networks:
   #    openimis-net:
-  #       ipv4_address: 172.20.${IP_SUB:-20}.18
-
+  #       ipv4_address: 172.20.${IP_SUB:-20}.12
+  #  ports:
+  #    - 8080:80
 
   #frontend:
   #  container_name: ${PROJECT_NAME:-openimis}-frontend
