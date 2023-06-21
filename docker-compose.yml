@@ -46,6 +46,7 @@ services:
       - ../openimis-be-claim_py:/openimis-be-claim_py
       - ../openimis-be-location_py:/openimis-be-location_py
       - ../openimis-be-product_py:/openimis-be-product_py
+      - ../openimis-be-medical_py:/openimis-be-medical_py
       - photos:/openimis-be/openIMIS/images/insurees
     command: start
     environment: &backend-env
