@@ -39,13 +39,17 @@ services:
     image: openimis/backend:${PROJECT_NAME:-local}
     volumes:
       - ../openimis-be_py:/openimis-be
+      - ../openimis-be-core_py:/openimis-be-core_py
       - ../openimis-be-cs_py:/openimis-be-cs_py
       - ../openimis-be-csu_py:/openimis-be-csu_py
       - ../openimis-be-report-csu_py:/openimis-be-report-csu_py
+      - ../openimis-be-report-cs_py:/openimis-be-report-cs_py
       - ../openimis-be-program_py:/openimis-be-program_py
       - ../openimis-be-claim_py:/openimis-be-claim_py
       - ../openimis-be-location_py:/openimis-be-location_py
       - ../openimis-be-product_py:/openimis-be-product_py
+      - ../openimis-be-policy_py:/openimis-be-policy_py
+      - ../openimis-be-insuree_py:/openimis-be-insuree_py
       - ../openimis-be-medical_py:/openimis-be-medical_py
       - photos:/openimis-be/openIMIS/images/insurees
     command: start
