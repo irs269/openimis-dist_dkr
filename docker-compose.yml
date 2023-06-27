@@ -38,7 +38,7 @@ services:
         OPENIMIS_CONF_JSON: ${OPENIMIS_BE_CONF_JSON}
     image: openimis/backend:${PROJECT_NAME:-local}
     volumes:
-      - ../openimis-be_py:/openimis-be_py
+      - ../openimis-be_py:/openimis-be
       - ../openimis-be-insuree_py:/openimis-be-insuree_py
       - ../openimis-be-idps_py:/openimis-be-idps_py
       - ../openimis-be-medical_py:/openimis-be-medical_py
