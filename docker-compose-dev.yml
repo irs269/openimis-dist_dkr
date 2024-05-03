@@ -1,16 +1,16 @@
 #version: "3.7"
 include:
-  - path: docker-compose.psql.yml
-    env_file: .env
-  - path: docker-compose.base.yml
-    env_file: .env
+  - path: docker-compose.psql.dev.yml
+    env_file: .env.dev
+  - path: docker-compose.base.dev.yml
+    env_file: .env.dev
   # - path: docker-compose.openSearch.yml
   #   env_file: 
-  #    - .env  
+  #    - .env.dev
   #    - .env.openSearch
   # - path: docker-compose.lightning.yml
   #   env_file: 
-  #    - .env 
+  #    - .env.dev
   #    - .env.lightning
 #  - path: docker-compose.certbot.yml
 

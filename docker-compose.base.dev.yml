@@ -14,7 +14,10 @@ x-api: &default-api
     - MODE=${MODE:-Prod}
   volumes:
     - photos:/openimis-be/openIMIS/images/insurees
-    - ../openimis-be_py/openimis.json:/openimis-be/openimis.json
+    - ../openimis-be-insuree_py:/openimis-be-insuree_py
+    - ../openimis-be-policy_py:/openimis-be-policy_py
+    - ../openimis-be_py:/openimis-be
+    - ../openimis-be_py/openimis-dev.json:/openimis-be/openimis.json
   depends_on:
     db:
       condition: service_healthy
