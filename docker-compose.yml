@@ -53,6 +53,7 @@ services:
       - ../openimis-be-medical_py:/openimis-be-medical_py
       - ../openimis-be-api_fhir_r4_py:/openimis-be-api_fhir_r4_py
       - ../openimis-be-tools_py:/openimis-be-tools_py
+      - ../openimis-be-idps_py:/openimis-be-idps_py
       - photos:/openimis-be/openIMIS/images/insurees
     command: start
     environment: &backend-env
