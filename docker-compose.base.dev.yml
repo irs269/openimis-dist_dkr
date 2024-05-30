@@ -17,6 +17,7 @@ x-api: &default-api
     - ../openimis-be-insuree_py:/openimis-be-insuree_py
     - ../openimis-be-policy_py:/openimis-be-policy_py
     - ../openimis-be-calculation_comores_py:/openimis-be-calculation_comores_py
+    - ../openimis-be-report-comores_py:/openimis-be-report-comores_py
     - ../openimis-be_py:/openimis-be
     - ../openimis-be_py/openimis-dev.json:/openimis-be/openimis.json
   depends_on:
