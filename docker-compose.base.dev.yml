@@ -16,6 +16,7 @@ x-api: &default-api
     - photos:/openimis-be/openIMIS/images/insurees
     - ../openimis-be-insuree_py:/openimis-be-insuree_py
     - ../openimis-be-policy_py:/openimis-be-policy_py
+    - ../openimis-be-core_py:/openimis-be-core_py
     - ../openimis-be-calculation_comores_py:/openimis-be-calculation_comores_py
     - ../openimis-be-report-comores_py:/openimis-be-report-comores_py
     - ../openimis-be_py:/openimis-be
