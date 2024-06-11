@@ -21,6 +21,7 @@ x-api: &default-api
     - ../openimis-be-report-comores_py:/openimis-be-report-comores_py
     - ../openimis-be_py:/openimis-be
     - ../openimis-be_py/openimis-dev.json:/openimis-be/openimis.json
+    - ../openimis-be_py/script/reportbro.py:/openimis-be/script/
   depends_on:
     db:
       condition: service_healthy

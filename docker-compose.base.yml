@@ -15,6 +15,7 @@ x-api: &default-api
   volumes:
     - photos:/openimis-be/openIMIS/images/insurees
     - ../openimis-be_py/openimis.json:/openimis-be/openimis.json
+    - ../openimis-be_py/script/reportbro.py:/openimis-be/script/
   depends_on:
     db:
       condition: service_healthy
