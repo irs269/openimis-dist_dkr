@@ -48,6 +48,10 @@ services:
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
+      # - ../openimis-fe-insuree_js:/conf/openimis-fe-insuree_js
+      # - ../openimis-fe-policy_js:/conf/openimis-fe-policy_js
+      # - ../openimis-fe-contribution_js_js:/conf/openimis-fe-contribution_js
+      - ../openimis-fe_js:/conf/openimis-fe_js
       # uncomment to use custom openimis.conf
       - ./conf/nginx:/conf/
   backend:
