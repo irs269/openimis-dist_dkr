@@ -27,7 +27,11 @@ x-api: &default-api
 services:
   frontend:
     container_name: ${PROJECT_NAME:-openimis}-frontend
-    image: ghcr.io/openimis/openimis-fe:${FE_TAG:-develop}
+    build:
+      context: ../openimis-fe_js/
+      args:
+        OPENIMIS_CONF_JSON: ${OPENIMIS_FE_CONF_JSON}
+    image: openimis/frontend:${PROJECT_NAME:-local}
     restart: always
     environment:
       - REACT_APP_API_URL=api
