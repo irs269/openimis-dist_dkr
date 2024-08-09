@@ -1,37 +1,8 @@
 version: "2.4"
 
 services:
-  db:
-    container_name: ${PROJECT_NAME:-openimis}-db
-    build:
-      context: ../openimis-db_dkr/
-      args:
-        - ACCEPT_EULA=${ACCEPT_EULA}
-        - MSSQL_SA_PASSWORD=${DB_PASSWORD}
-    environment:
-      - DB_USER_PASSWORD=${DB_PASSWORD}
-      - SA_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - ACCEPT_EULA=${ACCEPT_EULA}
-    volumes:
-      - ./mssql/logs:/var/opt/mssql/log 
-      - ./mssql/database:/var/opt/mssql/data
-    healthcheck:
-      test: "bash /app/healthcheck.sh"
-      interval: 40s
-      timeout: 10s
-      retries: 5
-    networks:
-      openimis-net:
-        ipv4_address: 172.20.${IP_SUB:-20}.99
-  ## WARNING:
-    ## exposing the database port outside the openimis-net network
-    ## may lead to security issue (depending on your network topology)
-    ports:
-      - 1433:1433
-  backend:
-    container_name: ${PROJECT_NAME:-openimis}-backend
+  backend-prod:
+    container_name: ${PROJECT_NAME:-openimis}-backend-prod
     build:
       context: ../openimis-be_py/
       args:
@@ -42,8 +13,8 @@ services:
       - ../openimis-be-core_py:/openimis-be-core_py
       - ../openimis-be-cs_py:/openimis-be-cs_py
       - ../openimis-be-csu_py:/openimis-be-csu_py
-      - ../openimis-be-report-csu_py:/openimis-be-report-csu_py
       - ../openimis-be-report-cs_py:/openimis-be-report-cs_py
+      - ../openimis-be-report-csu_py:/openimis-be-report-csu_py
       - ../openimis-be-program_py:/openimis-be-program_py
       - ../openimis-be-claim_py:/openimis-be-claim_py
       - ../openimis-be-location_py:/openimis-be-location_py
@@ -53,9 +24,8 @@ services:
       - ../openimis-be-medical_py:/openimis-be-medical_py
       - ../openimis-be-api_fhir_r4_py:/openimis-be-api_fhir_r4_py
       - ../openimis-be-tools_py:/openimis-be-tools_py
-      - ../openimis-be-idps_py:/openimis-be-idps_py
-      - photos:/openimis-be/openIMIS/images/insurees
-    command: start
+      - photos:/openimis-be/openIMIS/openIMISphone/
+    command: start_wsgi
     environment: &backend-env
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
@@ -69,24 +39,24 @@ services:
       openimis-net:
          ipv4_address: 172.20.${IP_SUB:-20}.12
     ports:
-      - ${HTTP_PORT:-8000}:8000
+      - ${HTTP_PORT:-8002}:8000
 
-  #webservice:
-  #  container_name: ${PROJECT_NAME:-openimis}-webservice
-  #  build:
-  #    context: ../rest_api_c-sharp/
-  #  image: openimis/webservice:${PROJECT_NAME:-local}
-  #  volumes:
-  #    - ./OpenImis.RestApi/config:/app/config
-  #    - ./OpenImis.RestApi/logs:/app/log
-  #    - ./OpenImis.RestApi/Certificates:/app/wwwRoot/Certificates
-  #    - photos:/app/openIMISphone
-  #  command: start
-  #  networks:
-  #    openimis-net:
-  #       ipv4_address: 172.20.${IP_SUB:-20}.12
-  #  ports:
-  #    - 8080:80
+#  webservice-prod:
+#    container_name: ${PROJECT_NAME:-openimis}-webservice-prod
+#    build:
+#      context: ../rest_api_c-sharp/
+#    image: openimis/webservice:${PROJECT_NAME:-local}
+#    volumes:
+#      - ./OpenImis.RestApi/config:/app/config
+#      - ./OpenImis.RestApi/logs:/app/log
+#      - ./OpenImis.RestApi/Certificates:/app/wwwRoot/Certificates
+#      - photos:/app/openIMISphone
+#    command: start
+#    networks:
+#      openimis-net:
+#         ipv4_address: 172.20.${IP_SUB:-20}.18
+#    ports:
+#      - 8082:80
 
   #frontend:
   #  container_name: ${PROJECT_NAME:-openimis}-frontend
