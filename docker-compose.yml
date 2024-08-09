@@ -1,30 +1,32 @@
 version: "2.4"
 
 services:
-  backend-prod:
-    container_name: ${PROJECT_NAME:-openimis}-backend-prod
+  backend-dev:
+    container_name: ${PROJECT_NAME:-openimis}-backend
     build:
       context: ../openimis-be_py/
       args:
         OPENIMIS_CONF_JSON: ${OPENIMIS_BE_CONF_JSON}
     image: openimis/backend:${PROJECT_NAME:-local}
     volumes:
+      - ../openimis-be-contribution_py:/openimis-be-contribution_py
       - ../openimis-be_py:/openimis-be
       - ../openimis-be-core_py:/openimis-be-core_py
       - ../openimis-be-cs_py:/openimis-be-cs_py
       - ../openimis-be-csu_py:/openimis-be-csu_py
-      - ../openimis-be-report-cs_py:/openimis-be-report-cs_py
       - ../openimis-be-report-csu_py:/openimis-be-report-csu_py
+      - ../openimis-be-report-cs_py:/openimis-be-report-cs_py
       - ../openimis-be-program_py:/openimis-be-program_py
       - ../openimis-be-claim_py:/openimis-be-claim_py
       - ../openimis-be-location_py:/openimis-be-location_py
       - ../openimis-be-product_py:/openimis-be-product_py
-      - ../openimis-be-policy_py:/openimis-be-policy_py
       - ../openimis-be-insuree_py:/openimis-be-insuree_py
+      - ../openimis-be-policy_py:/openimis-be-policy_py
       - ../openimis-be-medical_py:/openimis-be-medical_py
       - ../openimis-be-api_fhir_r4_py:/openimis-be-api_fhir_r4_py
       - ../openimis-be-tools_py:/openimis-be-tools_py
-      - photos:/openimis-be/openIMIS/openIMISphone/
+      - ../openimis-be-idps_py:/openimis-be-idps_py
+      - photos:/openimis-be/openIMIS/images/insurees
     command: start_wsgi
     environment: &backend-env
       - DB_HOST=${DB_HOST}
@@ -35,14 +37,21 @@ services:
       - SITE_ROOT=api
       - SITE_URL=${NEW_OPENIMIS_HOST}
       - CELERY_BROKER_URL=amqp://rabbitmq
+      - OM_KEY=${OM_KEY}
+      - OM_SECRET=${OM_SECRET}
+      - AWS_KEY=${AWS_KEY}
+      - AWS_SECRET=${AWS_SECRET}
+      - X_AUTH_TOKEN=${X_AUTH_TOKEN}
+      - OM_PIN=${OM_PIN}
+      - OM_CHANNEL=${OM_CHANNEL}
     networks:
       openimis-net:
          ipv4_address: 172.20.${IP_SUB:-20}.12
     ports:
-      - ${HTTP_PORT:-8002}:8000
+      - ${HTTP_PORT:-8000}:8000
 
-#  webservice-prod:
-#    container_name: ${PROJECT_NAME:-openimis}-webservice-prod
+#  webservice:
+#    container_name: ${PROJECT_NAME:-openimis}-webservice
 #    build:
 #      context: ../rest_api_c-sharp/
 #    image: openimis/webservice:${PROJECT_NAME:-local}
@@ -54,9 +63,9 @@ services:
 #    command: start
 #    networks:
 #      openimis-net:
-#         ipv4_address: 172.20.${IP_SUB:-20}.18
+#         ipv4_address: 172.20.${IP_SUB:-20}.13
 #    ports:
-#      - 8082:80
+#      - 8080:80
 
   #frontend:
   #  container_name: ${PROJECT_NAME:-openimis}-frontend
