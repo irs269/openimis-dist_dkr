@@ -34,35 +34,35 @@ x-api: &default-api
     - CELERY_BROKER_URL=amqp://rabbitmq
 
 services:
-  db:
-    container_name: ${PROJECT_NAME:-openimis}-db
-    build:
-      context: ../openimis-db_dkr/
-      args:
-        - ACCEPT_EULA=${ACCEPT_EULA}
-        - MSSQL_SA_PASSWORD=${DB_PASSWORD}
-    environment:
-      - DB_USER_PASSWORD=${DB_PASSWORD}
-      - SA_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - ACCEPT_EULA=${ACCEPT_EULA}
-    volumes:
-      - ./mssql/logs:/var/opt/mssql/log 
-      - ./mssql/database:/var/opt/mssql/data
-    healthcheck:
-      test: "bash /app/healthcheck.sh"
-      interval: 40s
-      timeout: 10s
-      retries: 5
-    networks:
-      openimis-net:
-        ipv4_address: 172.20.${IP_SUB:-20}.99
-  ## WARNING:
-    ## exposing the database port outside the openimis-net network
-    ## may lead to security issue (depending on your network topology)
-    ports:
-      - 1433:1433
+  # db:
+  #   container_name: ${PROJECT_NAME:-openimis}-db
+  #   build:
+  #     context: ../openimis-db_dkr/
+  #     args:
+  #       - ACCEPT_EULA=${ACCEPT_EULA}
+  #       - MSSQL_SA_PASSWORD=${DB_PASSWORD}
+  #   environment:
+  #     - DB_USER_PASSWORD=${DB_PASSWORD}
+  #     - SA_PASSWORD=${DB_PASSWORD}
+  #     - DB_NAME=${DB_NAME}
+  #     - DB_USER=${DB_USER}
+  #     - ACCEPT_EULA=${ACCEPT_EULA}
+  #   volumes:
+  #     - ./mssql/logs:/var/opt/mssql/log 
+  #     - ./mssql/database:/var/opt/mssql/data
+  #   healthcheck:
+  #     test: "bash /app/healthcheck.sh"
+  #     interval: 40s
+  #     timeout: 10s
+  #     retries: 5
+  #   networks:
+  #     openimis-net:
+  #       ipv4_address: 172.20.${IP_SUB:-20}.99
+  # ## WARNING:
+  #   ## exposing the database port outside the openimis-net network
+  #   ## may lead to security issue (depending on your network topology)
+  #   ports:
+  #     - 1433:1433
   backend:
     <<: *default-api
     container_name: ${PROJECT_NAME:-openimis}-backend
