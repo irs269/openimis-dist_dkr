@@ -14,11 +14,13 @@ x-api: &default-api
     - MODE=${MODE:-Prod}
   volumes:
     - photos:/openimis-be/openIMIS/images/insurees
+    - ../openimis-be-insuree_py:/openimis-be-insuree_py
+    - ../openimis-be-policy_py:/openimis-be-policy_py
+    - ../openimis-be-core_py:/openimis-be-core_py
+    - ../openimis-be-calculation_comores_py:/openimis-be-calculation_comores_py
+    - ../openimis-be-report-comores_py:/openimis-be-report-comores_py
     - ../openimis-be_py:/openimis-be
-    - ../openimis-be_py/openimis.json:/openimis-be/openimis.json
-    - ../openimis-be_py/script/entrypoint.sh:/openimis-be/script/entrypoint.sh
-    - ../openimis-be-medical_py:/openimis-be-medical
-    - ../openimis-be_py/script/reportbro.py:/openimis-be/script/reportbro.py
+    - ../openimis-be_py/openimis-dev.json:/openimis-be/openimis.json
   depends_on:
     db:
       condition: service_healthy
@@ -29,11 +31,7 @@ x-api: &default-api
 services:
   frontend:
     container_name: ${PROJECT_NAME:-openimis}-frontend
-    build:
-      context: ../openimis-fe_js/
-      args:
-        OPENIMIS_CONF_JSON: ${OPENIMIS_FE_CONF_JSON}
-    image: openimis/frontend:${PROJECT_NAME:-local}
+    image: ghcr.io/openimis/openimis-fe:${FE_TAG:-develop}
     restart: always
     environment:
       - REACT_APP_API_URL=api
@@ -50,13 +48,12 @@ services:
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
+      # - ../openimis-fe-insuree_js:/conf/openimis-fe-insuree_js
+      # - ../openimis-fe-policy_js:/conf/openimis-fe-policy_js
+      # - ../openimis-fe-contribution_js_js:/conf/openimis-fe-contribution_js
       - ../openimis-fe_js:/conf/openimis-fe_js
-      - ../openimis-fe_js/script/entrypoint.sh:/script/entrypoint.sh
       # uncomment to use custom openimis.conf
       - ./conf/nginx:/conf/
-      - ../openimis-fe-medical_js:/conf/openimis-fe-medical_js
-      - ../openimis-fe-language_fr_km_js:/conf/openimis-fe-language_fr_km_js
-
   backend:
     <<: *default-api
     container_name: ${PROJECT_NAME:-openimis}-api
